@@ -12,6 +12,20 @@ const { hostRouter } = require('./routes/HostRoute')
 const cookieParser = require('cookie-parser')
 const { VerifyToken, AccessToken } = require('./JWT/Auth')
 const { isLoggedIn } = require('./middleware/isLoggedIn')
+const nodemailer=require("nodemailer")
+
+
+
+const transport=nodemailer.createTransport({
+    service:"gmail",
+    auth:{
+         user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+    }
+})
+
+
+
 
 const id=uuid()
 const storage=multer.diskStorage({
@@ -154,6 +168,75 @@ res.cookie("AccessToken",generateNewAccessToken)
 
 
 app.use("/owner",hostRouter)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.post("/sendMail", async (req, res) => {
+  const { checkInDate, checkOutDate, guests } = req.body.data;
+
+  const mailConfig = {
+    from: "aad769650@gmail.com",
+    to: "aad769650@gmail.com",
+    subject: `New Booking – ${guests} guest(s)`,
+    text: `
+New Booking Details
+
+Check-in Date: ${checkInDate}
+Check-out Date: ${checkOutDate}
+Number of Guests: ${guests}
+    `,
+  };
+
+  try {
+    await transport.sendMail(mailConfig);
+    console.log("Email sent");
+
+    return res.status(200).json({
+      success: true,
+      message: "Email sent successfully",
+    });
+
+  } catch (err) {
+    console.error("Email error:", err.code || err.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to send email",
+    });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.listen(process.env.PORT,()=>{
   console.log(`server is listening on PORT:8000`);
   

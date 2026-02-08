@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-
+import {toast} from "sonner"
+import { sendMailToAdmin } from '../api/apiCall';
 
 
 export default function DetailOfRooms() {
@@ -35,6 +36,21 @@ export default function DetailOfRooms() {
     return diffDays;
   };
 
+
+
+const handleBtnClick=()=>{
+  console.log(checkInDate,checkOutDate,guests);
+  console.log("Mail is send to admin");
+  sendMailToAdmin({checkInDate,checkOutDate,guests})
+  
+
+
+  setCheckInDate("")
+  setCheckOutDate("")
+  setGuests(1)
+}
+
+
   const nights = calculateNights();
   const pricePerNight = parseFloat(property.price_per_night);
   const subtotal = nights * pricePerNight;
@@ -59,13 +75,13 @@ export default function DetailOfRooms() {
   <div className='w-32 h-1.5 bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 mx-auto rounded-full mt-3'></div>
 </div>
       {/* Hero Image */}
-<div className="w-100 h-50 md:h-75 lg:h-125 relative overflow-hidden bg-gray-100">
+<div className="md:w-100 h-50 md:h-75 lg:h-125 relative overflow-hidden bg-gray-100">
   <img 
     src={property.main_pic} 
     alt={property.title}
     className="w-full h-full object-cover object-center rounded"
   />
-  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+  <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-black/20"></div>
   
   {/* Back Button */}
   <button 
@@ -131,8 +147,8 @@ export default function DetailOfRooms() {
             </div>
 
             {/* Host Info Card */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-8 border border-blue-200">
-              <div className="flex items-center gap-4">
+            <div className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-8 border border-blue-200">
+              <div className="flex items-center gap-4 border">
                 <img 
                   src={"/host.jpg"} 
                   alt={property.hosted_by}
@@ -182,10 +198,10 @@ export default function DetailOfRooms() {
             </div>
 
             {/* Complete Host Details */}
-            <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-8 border border-gray-200">
+            <div className="bg-linear-to-br from-gray-50 to-blue-50 rounded-2xl p-8 border border-gray-200">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Meet your host</h2>
               <div className="flex flex-col md:flex-row gap-6">
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <img 
                     src={"/host.jpg"} 
                     alt={"Abu Bakr Shiraz"}
@@ -323,9 +339,14 @@ export default function DetailOfRooms() {
                   disabled={!checkInDate || !checkOutDate || nights <= 0}
                   className={`w-full font-bold py-4 rounded-lg transition-all shadow-lg mb-3 ${
                     checkInDate && checkOutDate && nights > 0
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white hover:shadow-xl'
+                      ? 'bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white hover:shadow-xl'
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   }`}
+
+                                    onClick={()=>{
+                                      handleBtnClick()
+                                      toast.info("Room is Booked for you")}}
+
                 >
                   {checkInDate && checkOutDate && nights > 0 ? 'Book Now' : 'Select Dates to Book'}
                 </button>
@@ -336,6 +357,8 @@ export default function DetailOfRooms() {
                       ? 'bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50'
                       : 'bg-white border-2 border-gray-300 text-gray-400 cursor-not-allowed'
                   }`}
+
+                  onClick={()=>toast.info("Room is Reserved for you")}
                 >
                   Reserve
                 </button>
@@ -374,7 +397,7 @@ export default function DetailOfRooms() {
               {/* Safety Info */}
               <div className="mt-6 bg-blue-50 rounded-xl p-4 border border-blue-200">
                 <div className="flex items-start gap-3">
-                  <svg className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-6 h-6 text-blue-600 shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                   <div>

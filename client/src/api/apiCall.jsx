@@ -128,8 +128,20 @@ export const DeleteRoom=async(id)=>{
     console.log("resp",resp.data);
     return resp.data;
 }
+
+
+
 export const Logout=async()=>{
         const resp=await axios.get("http://localhost:8000/owner/logout",{withCredentials:true})
+    console.log("resp",resp.data);
+    return resp.data;
+}
+
+
+export const sendMailToAdmin=async(data)=>{
+    console.log(data);
+    
+        const resp=await axios.post("http://localhost:8000/sendMail",{data},{withCredentials:true})
     console.log("resp",resp.data);
     return resp.data;
 }

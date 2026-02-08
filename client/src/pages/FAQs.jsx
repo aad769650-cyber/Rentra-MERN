@@ -172,60 +172,60 @@ export default function FAQ() {
           </div>
 
           {/* Questions */}
-          <div className="space-y-4">
-            {currentCategory.questions.map((item, questionIndex) => {
-              const isOpen = openIndex === questionIndex;
+       <div className="space-y-4">
+  {currentCategory.questions.map((item, questionIndex) => {
+    const isOpen = openIndex === questionIndex;
 
-              return (
-                <div 
-                  key={questionIndex}
-                  className="bg-white rounded-xl overflow-hidden border-2 border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all duration-300"
-                >
-                  {/* Question */}
-                  <button
-                    onClick={() => toggleAccordion(questionIndex)}
-                    className="w-full flex items-center justify-between p-6 text-left hover:bg-blue-50 transition-colors duration-200"
-                  >
-                    <div className="flex items-start gap-4 flex-1">
-                      <div className={`mt-1 transition-all duration-300 ${isOpen ? 'rotate-90 text-blue-600' : 'text-gray-400'}`}>
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <span className="font-bold text-lg text-gray-800 block mb-1">
-                          {item.question}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          Click to {isOpen ? 'collapse' : 'expand'}
-                        </span>
-                      </div>
-                    </div>
-                    <div className={`shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
-                      <svg className="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </button>
-
-                  {/* Answer */}
-                  <div 
-                    className={`transition-all duration-500 ease-in-out ${
-                      isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                    } overflow-hidden`}
-                  >
-                    <div className="px-6 pb-6 pl-16">
-                      <div className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border-l-4 border-blue-600 shadow-inner">
-                        <p className="text-gray-700 leading-relaxed text-base">
-                          {item.answer}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+    return (
+      <div 
+        key={questionIndex}
+        className="bg-white rounded-xl overflow-hidden border-2 border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all duration-300"
+      >
+        {/* Question */}
+        <button
+          onClick={() => toggleAccordion(questionIndex)}
+          className="w-full flex items-center justify-between p-4 sm:p-6 text-left hover:bg-blue-50 transition-colors duration-200"
+        >
+          <div className="flex items-start gap-2 sm:gap-4 flex-1 min-w-0">
+            <div className={`mt-0.5 sm:mt-1 transition-all duration-300 shrink-0 ${isOpen ? 'rotate-90 text-blue-600' : 'text-gray-400'}`}>
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="font-bold text-base sm:text-lg text-gray-800 block mb-1">
+                {item.question}
+              </span>
+              <span className="text-xs sm:text-sm text-gray-500 hidden sm:inline">
+                Click to {isOpen ? 'collapse' : 'expand'}
+              </span>
+            </div>
           </div>
+          <div className={`shrink-0 ml-2 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </button>
+
+        {/* Answer */}
+        <div 
+          className={`transition-all duration-500 ease-in-out ${
+            isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          } overflow-hidden`}
+        >
+          <div className="px-4 pb-4 sm:px-6 sm:pb-6 pl-11 sm:pl-16">
+            <div className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-5 border-l-4 border-blue-600 shadow-inner">
+              <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
+                {item.answer}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  })}
+</div>
         </div>
 
         {/* Contact Section */}

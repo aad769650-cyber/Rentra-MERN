@@ -62,7 +62,7 @@ const handleClick=()=>{
  className={({ isActive }) =>
   isActive
       ? "px-4 py-2 text-black border-b-2 border-black md:flex gap-2 hidden"
-      : "px-4 py-2 text-gray-500 hover:text-blue-600 md:flex gap-2 "
+      : "px-4 py-2 text-gray-500 hover:text-blue-600 md:flex gap-2 hidden"
 
 
       

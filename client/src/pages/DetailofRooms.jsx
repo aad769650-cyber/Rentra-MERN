@@ -148,7 +148,7 @@ const handleBtnClick=()=>{
 
             {/* Host Info Card */}
             <div className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-8 border border-blue-200">
-              <div className="flex items-center gap-4 border">
+              <div className="flex items-center gap-4 ">
                 <img 
                   src={"/host.jpg"} 
                   alt={property.hosted_by}
@@ -269,7 +269,7 @@ const handleBtnClick=()=>{
 
           {/* Right Column - Sticky Booking Card */}
           <div className="lg:col-span-1">
-            <div className="sticky top-8">
+            <div className="sticky top-8 z-50">
               <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6">
                 <div className="mb-6">
                   <div className="flex items-baseline gap-2 mb-2">

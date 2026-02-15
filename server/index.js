@@ -27,7 +27,8 @@ const transport=nodemailer.createTransport({
 
 
 
-const id=uuid()
+const id=uuid();
+
 const storage=multer.diskStorage({
     destination:(req,file,cb)=>{
        return  cb(null,path.join(__dirname, "./hostImages")
@@ -45,9 +46,20 @@ return cb(null,`${id}-${file.originalname}`)
 const uploads=multer({storage})
 
 
+const allowedOrigins = [
+  "http://localhost:5173",  // Vite
+  "https://rentra-mern-frontend.onrender.com/" // production
+];
+
 app.use(cors(
     {
-        origin:"http://localhost:5173",
+         origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
         methods:["GET","POST","PATCH","DELETE"],
           credentials: true,    
     }
@@ -64,7 +76,7 @@ app.use("/api",router)
 
 
 app.post("/host/detail",uploads.single("RoomImage"),async(req,res)=>{
-        console.log("o",req.user);
+   
 
 
 // const user_id=await pool.execute(`select id from host where email=${req.}`)
@@ -93,11 +105,11 @@ const values = [
     Number(req.body.minimumStay),
     Number(req.body.pricePerNight),
     Number(req.body.cleaningFee),
-    req.body.essentials, // Already stringified from frontend
-    req.body.features,   // Already stringified from frontend
-    req.body.safety,     // Already stringified from frontend
+    req.body.essentials, 
+    req.body.features,   
+    req.body.safety,     
     `http://localhost:8000/host/${id}-${req.file.originalname}`,
-        // Already stringified from frontend
+        
         req?.user?.id||1
 ];
 
@@ -237,7 +249,7 @@ Number of Guests: ${guests}
 
 
 
-app.listen(process.env.PORT,()=>{
+app.listen(process.env.PORT||8000,()=>{
   console.log(`server is listening on PORT:8000`);
   
 })

@@ -68,14 +68,14 @@ try {
       .then((data)=>{
          if(data.status==204){
             toast.info("please Login")
-             window.location.href = "/hostLogin"
+window.location.href = "https://rentra-mern-frontend.onrender.com/hostLogin";
          }
       })
  
     }
  if(resp.status==200){
            toast.info("Welcome to your DashBoard")
-             window.location.href = "/hostDashBoard"
+window.location.href = "https://rentra-mern-frontend.onrender.com/hostDashboard";
  }
  
  
@@ -87,7 +87,7 @@ try {
    }).catch((err)=>{
       console.log("err",err);
           toast.error("Your Tokens Expired Please Login again")
-             window.location.href = "/hostLogin"
+window.location.href = "https://rentra-mern-frontend.onrender.com/hostLogin";
      })
 
 } catch (error) {

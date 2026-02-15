@@ -16,7 +16,7 @@ export default function DetailOfRooms() {
     console.log(params);
 
     const apiCall=async()=>{
-        const resp=await axios.get(`http://localhost:8000/api/detail?city=${params.cityName}&room=${params.id}`)
+        const resp=await axios.get(`https://rentra-mern.onrender.com/api/detail?city=${params.cityName}&room=${params.id}`)
    
    console.log(resp.data.detail);
    setProperty(resp.data.detail[0])

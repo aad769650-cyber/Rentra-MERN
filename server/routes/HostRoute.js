@@ -38,7 +38,7 @@ console.log(req.file.originalname);
 const file=req?.file?.originalname;
 const hashedPassword=await generateHashPassword(req.body.password);
 
-const profileImg=`http://localhost:8000/hostProfileImage/${id}-${file}`
+const profileImg=`https://rentra-mern.onrender.com//hostProfileImage/${id}-${file}`
     
 const data=await pool.execute(`INSERT INTO hostinfo (full_name, email, password_hash, profile_picture_url)
 VALUES (?,?,?,?)`,
@@ -99,8 +99,16 @@ const generateAccessToken=AccessToken(req.body)
 
 console.log(generateAccessToken);
 
-res.cookie("AccessToken",generateAccessToken)
-res.cookie("RefreshToken",generateRefreshToken)
+res.cookie("AccessToken", generateAccessToken, {
+  httpOnly: true,
+  secure: true,       // must be true for HTTPS
+  sameSite: "none"    // required for cross-domain
+});
+res.cookie("RefreshToken", generateRefreshToken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none"
+});
 
 return  res.status(200).send({msg:"ok login and token created successfully"})
 

@@ -48,7 +48,7 @@ const uploads=multer({storage})
 
 const allowedOrigins = [
   "http://localhost:5173",  // Vite
-  "https://rentra-mern-frontend.onrender.com/" // production
+  "https://rentra-mern-frontend.onrender.com" // production
 ];
 
 app.use(cors(
@@ -108,7 +108,7 @@ const values = [
     req.body.essentials, 
     req.body.features,   
     req.body.safety,     
-    `http://localhost:8000/host/${id}-${req.file.originalname}`,
+    `https://rentra-mern.onrender.com/host/${id}-${req.file.originalname}`,
         
         req?.user?.id||1
 ];

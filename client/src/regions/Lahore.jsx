@@ -14,7 +14,7 @@ const [isDesktop,setIsDesktop]=useState(true)
 
   const apiCall = async () => {
     try {
-      const resp = await axios.get("http://localhost:8000/api/lah");
+      const resp = await axios.get("https://rentra-mern.onrender.com/api/lah");
       // console.log(resp.data.data[0]);
       // keep same logic but ensure array
 setItems(resp.data.data[0].slice(stIdx,endIdx));

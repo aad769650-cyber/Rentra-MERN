@@ -43,9 +43,12 @@ hostRouter.post(
       const hashedPassword = await generateHashPassword(password);
 
       let profileImg = null;
+console.log(req.file);
 
       // If user uploaded image
       if (req.file) {
+        console.log("Inside ");
+        
         profileImg = await UploadOnCloudinary(req.file.path);
       }
 
@@ -79,7 +82,7 @@ hostRouter.post(
 
       return res.status(200).json({
         message: "Host registered successfully",
-        imageUrl: profileImg, // 👈 you can test this
+        imageUrl: {profileImg,file:req.file}, // 👈 you can test this
       });
 
     } catch (error) {

@@ -66,14 +66,15 @@ hostRouter.post("/register", upload.single("profileImage"), async (req, res) => 
         const accessToken = AccessToken(payload);
         const refreshToken = RefreshToken(payload);
 
-      res.cookie("AccessToken", generateAccessToken, 
+      res.cookie("AccessToken", accessToken, 
     {
   httpOnly: true,
   secure: true,       // must be true for HTTPS
   sameSite: "none"    // required for cross-domain
 }
 );
-res.cookie("RefreshToken", generateRefreshToken, 
+
+res.cookie("RefreshToken", refreshToken, 
     {
   httpOnly: true,
   secure: true,

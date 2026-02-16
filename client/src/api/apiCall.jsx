@@ -85,10 +85,12 @@ try {
  
     }
  if(resp.status==200){
+    console.log("ok redirecting");
+    
            toast.info("Welcome to your DashBoard");
 // window.location.href = "/hostDashboard";
 
- navigate("/hostLogin", { replace: true }); 
+ navigate("/hostDashboard", { replace: true }); 
 
 }
  
@@ -107,7 +109,7 @@ try {
 })
 
 } catch (error) {
-   console.log(error);
+   console.log("Try catch block",error);
    
 }
   

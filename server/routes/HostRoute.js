@@ -16,7 +16,7 @@ const { UploadOnCloudinary } = require("../utills/cloudinary");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../temp")); // create temp folder
+    cb(null,  "/tmp"); // create temp folder
   },
   filename: function (req, file, cb) {
     cb(null, uuid() + "-" + file.originalname);

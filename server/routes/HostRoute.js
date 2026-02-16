@@ -66,9 +66,20 @@ hostRouter.post("/register", upload.single("profileImage"), async (req, res) => 
         const accessToken = AccessToken(payload);
         const refreshToken = RefreshToken(payload);
 
-        res.cookie("AccessToken", accessToken);
-        res.cookie("RefreshToken", refreshToken);
-
+      res.cookie("AccessToken", generateAccessToken, 
+    {
+  httpOnly: true,
+  secure: true,       // must be true for HTTPS
+  sameSite: "none"    // required for cross-domain
+}
+);
+res.cookie("RefreshToken", generateRefreshToken, 
+    {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none"
+}
+)
         return res.status(200).json({ msg: "ok data inserted successfully" });
 
     } catch (error) {
@@ -102,18 +113,18 @@ const generateAccessToken=AccessToken(req.body)
 console.log(generateAccessToken);
 
 res.cookie("AccessToken", generateAccessToken, 
-    // {
-//   httpOnly: true,
-//   secure: true,       // must be true for HTTPS
-//   sameSite: "none"    // required for cross-domain
-// }
+    {
+  httpOnly: true,
+  secure: true,       // must be true for HTTPS
+  sameSite: "none"    // required for cross-domain
+}
 );
 res.cookie("RefreshToken", generateRefreshToken, 
-    // {
-//   httpOnly: true,
-//   secure: true,
-//   sameSite: "none"
-// }
+    {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none"
+}
 
 );
 

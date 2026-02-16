@@ -10,7 +10,10 @@ const pool=mysql.createPool({
     port:process.env.sqlPort,
     password:process.env.PASSWORD,
     user:process.env.USER,
-    ssl:{ca:fs.readFileSync(process.env.CA)},
+    ssl:{
+      // ca:fs.readFileSync(process.env.CA),
+       rejectUnauthorized: false
+    },
      waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0

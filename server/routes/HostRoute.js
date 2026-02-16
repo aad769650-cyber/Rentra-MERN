@@ -9,7 +9,7 @@ const { pool } = require("../db/db");
 const { json } = require("stream/consumers");
 const { AccessToken, RefreshToken, VerifyToken } = require("../JWT/Auth");
 const { isLoggedIn } = require("../middleware/isLoggedIn");
-const id=uuid()
+// const id=uuid()
 
 const storage=multer.diskStorage({
     destination:(req,file,cb)=>{
@@ -32,48 +32,50 @@ const upload=multer({storage})
 
 
 
-hostRouter.post("/register",upload.single("profileImage"),async(req,res)=>{
+hostRouter.post("/register", upload.single("profileImage"), async (req, res) => {
     try {
-console.log(req.file.originalname);
-const file=req?.file?.originalname;
-const hashedPassword=await generateHashPassword(req.body.password);
 
-const profileImg=`https://rentra-mern.onrender.com//hostProfileImage/${id}-${file}`
-    
-const data=await pool.execute(`INSERT INTO hostinfo (full_name, email, password_hash, profile_picture_url)
-VALUES (?,?,?,?)`,
-[
-    req.body.name,
-    req.body.email,
-   hashedPassword,
-profileImg
-    
+        const id = uuid();
 
-])
-// console.log(hashedPassword);
+        const file = req?.file?.originalname || null;
 
-const generateRefreshToken=RefreshToken(data)
-const generateAccessToken=AccessToken(data)
+        const hashedPassword = await generateHashPassword(req.body.password);
 
+        let profileImg = null;
 
-console.log(generateAccessToken);
+        if (file) {
+            profileImg = `https://rentra-mern.onrender.com/hostProfileImages/${id}-${file}`;
+        }
 
-res.cookie("AccessToken",generateAccessToken)
-res.cookie("RefreshToken",generateRefreshToken)
+        const [result] = await pool.execute(
+            `INSERT INTO hostinfo (full_name, email, password_hash, profile_picture_url)
+             VALUES (?,?,?,?)`,
+            [
+                req.body.name,
+                req.body.email,
+                hashedPassword,
+                profileImg
+            ]
+        );
 
-    
+        const payload = {
+            id: result.insertId,
+            email: req.body.email
+        };
 
+        const accessToken = AccessToken(payload);
+        const refreshToken = RefreshToken(payload);
 
+        res.cookie("AccessToken", accessToken);
+        res.cookie("RefreshToken", refreshToken);
 
-return  res.status(200).send({msg:"ok data inserted successfully"})
-} catch (error) {
-    console.log("error in code");
-    
-    return  res.status(400).send({msg:error})
+        return res.status(200).json({ msg: "ok data inserted successfully" });
 
-}
-
-})
+    } catch (error) {
+        console.log(error); // 👈 log real error
+        return res.status(400).json({ msg: error.message });
+    }
+});
 
 
 
@@ -99,16 +101,21 @@ const generateAccessToken=AccessToken(req.body)
 
 console.log(generateAccessToken);
 
-res.cookie("AccessToken", generateAccessToken, {
-  httpOnly: true,
-  secure: true,       // must be true for HTTPS
-  sameSite: "none"    // required for cross-domain
-});
-res.cookie("RefreshToken", generateRefreshToken, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "none"
-});
+res.cookie("AccessToken", generateAccessToken, 
+    // {
+//   httpOnly: true,
+//   secure: true,       // must be true for HTTPS
+//   sameSite: "none"    // required for cross-domain
+// }
+);
+res.cookie("RefreshToken", generateRefreshToken, 
+    // {
+//   httpOnly: true,
+//   secure: true,
+//   sameSite: "none"
+// }
+
+);
 
 return  res.status(200).send({msg:"ok login and token created successfully"})
 

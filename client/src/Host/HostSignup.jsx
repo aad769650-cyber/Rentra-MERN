@@ -98,7 +98,10 @@ console.log(formData);
     password: ''
 
     
- })
+ }
+
+
+)
  setProfileImage(null)
 setImagePreview(null)
    
@@ -114,7 +117,7 @@ navigate("/hostDashboard")
 
 
 
-    console.log(resp,"2");
+    console.log(resp,"2 ");
     
 
 

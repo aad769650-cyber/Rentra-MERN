@@ -25,8 +25,10 @@ export const registerHost=async(actualData)=>{
      for (let [key, val] of actualData.entries()) console.log(key, val)
 
    try {
-     const resp=await axios.post("https://rentra-mern.onrender.com/owner/register",actualData,{withCredentials:true})
-    console.log("resp",resp);
+    console.log("checking...");
+    
+       const resp=await axios.post("https://rentra-mern.onrender.com/owner/register",actualData,{withCredentials:true})
+       console.log("resp",resp);
     return  resp
    } catch (error) {
     console.log("err api",error);
@@ -68,15 +70,21 @@ try {
       .then((data)=>{
          if(data.status==204){
             toast.info("please Login")
-window.location.href = "https://rentra-mern-frontend.onrender.com/hostLogin";
+// window.location.href = "/hostLogin";
+{/* <Navigate to={"/hostLogin"}></Navigate> */}
+<Navigate to="/hostLogin" replace />
          }
       })
  
     }
  if(resp.status==200){
-           toast.info("Welcome to your DashBoard")
-window.location.href = "https://rentra-mern-frontend.onrender.com/hostDashboard";
- }
+           toast.info("Welcome to your DashBoard");
+// window.location.href = "/hostDashboard";
+
+<Navigate to="/hostDashboard" replace />
+ 
+
+}
  
  
  
@@ -86,8 +94,9 @@ window.location.href = "https://rentra-mern-frontend.onrender.com/hostDashboard"
  
    }).catch((err)=>{
       console.log("err",err);
-          toast.error("Your Tokens Expired Please Login again")
-window.location.href = "https://rentra-mern-frontend.onrender.com/hostLogin";
+          toast.error("Your Tokens Expired Please Login again");
+// window.location.href = "/hostLogin";
+<Navigate to="/hostLogin" replace />
      })
 
 } catch (error) {

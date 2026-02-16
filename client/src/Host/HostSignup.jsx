@@ -70,74 +70,34 @@ export default function HostSignup() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!validateForm()) return;
+
+  const actualData = new FormData();
+  actualData.append("profileImage", profileImage); // ✅ correct
+  actualData.append("name", formData.fullName);
+  actualData.append("email", formData.email);
+  actualData.append("password", formData.password);
+
+  try {
+    const resp = await registerHost(actualData);
     
-    if (validateForm()) {
+    if (resp?.status === 200) {
+      setFormData({ fullName: '', email: '', password: '' });
+      setProfileImage(null);
+      setImagePreview(null);
 
-        setFormData(()=>{return {
-        ...formData,
-        profileImage: profileImage ? profileImage : 'No image uploaded'
-    }})
-      console.log('Form submitted successfully:',formData);
-    }else{return {msg:"error"}}
-
-
-    
-      const actualData=new FormData();
-
-      actualData.append("profileImage",formData.profileImage)
-      actualData.append("name",formData.fullName)
-      actualData.append("email",formData.email)
-      actualData.append("password",formData.password);
-
-console.log(formData);
-
- try {
-        const resp=registerHost(actualData).then((data)=>{
-            console.log(data,"1");
-     if(data.status==200){
-                setFormData({   fullName: '',
-    email: '',
-    password: ''
-
-    
- }
-
-
-)
- setProfileImage(null)
-setImagePreview(null)
-   
-
- toast.success("Login Successfully")
-navigate("/hostDashboard")
-
-}
-        }).catch((err)=>{
-          console.log(err);
-          
-        })
-
-
-
-    console.log(resp,"2 ");
-    
-
-
-
- } catch (error) {
-    console.log(error);
-      setFormData({   fullName: '',
-    email: '',
-    password: ''
-
- })
- alert("error in submitting")
- }
-      // Here you would typically send the data to your backend
-
+      toast.success("Registered Successfully");
+      navigate("/hostDashboard");
+    }
+  } catch (err) {
+    console.log(err);
+    toast.error("Error submitting form");
+  }
 };
+
 
   return (
     <div className="min-h-screen bg-linear-to-br from-indigo-100 via-purple-50 to-pink-100 flex items-center justify-center p-4">

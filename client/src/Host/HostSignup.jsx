@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, User, Upload } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { registerHost } from '../api/apiCall';
+import { toast } from 'sonner';
 
 export default function HostSignup() {
   const navigate=useNavigate()

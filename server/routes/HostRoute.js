@@ -9,7 +9,7 @@ const { pool } = require("../db/db");
 const { json } = require("stream/consumers");
 const { AccessToken, RefreshToken, VerifyToken } = require("../JWT/Auth");
 const { isLoggedIn } = require("../middleware/isLoggedIn");
-// const id=uuid()
+const id=uuid()
 
 const storage=multer.diskStorage({
     destination:(req,file,cb)=>{
@@ -35,7 +35,7 @@ const upload=multer({storage})
 hostRouter.post("/register", upload.single("profileImage"), async (req, res) => {
     try {
 
-        const id = uuid();
+        // const id = uuid();
 
         const file = req?.file?.originalname || null;
 

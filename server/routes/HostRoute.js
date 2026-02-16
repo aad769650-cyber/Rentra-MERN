@@ -1,4 +1,3 @@
-import { UploadOnCloudinary } from "../utills/cloudinary";
 
 const express=require("express");
 
@@ -11,6 +10,7 @@ const { pool } = require("../db/db");
 const { json } = require("stream/consumers");
 const { AccessToken, RefreshToken, VerifyToken } = require("../JWT/Auth");
 const { isLoggedIn } = require("../middleware/isLoggedIn");
+const { UploadOnCloudinary } = require("../utills/cloudinary");
 // const id=uuid()
 
 

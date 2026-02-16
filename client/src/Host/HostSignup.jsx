@@ -81,6 +81,9 @@ export default function HostSignup() {
     }})
       console.log('Form submitted successfully:',formData);
     }else{return {msg:"error"}}
+
+
+    
       const actualData=new FormData();
 
       actualData.append("profileImage",formData.profileImage)

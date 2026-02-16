@@ -1,3 +1,5 @@
+import { UploadOnCloudinary } from "../utills/cloudinary";
+
 const express=require("express");
 
 const hostRouter=express.Router();
@@ -9,21 +11,19 @@ const { pool } = require("../db/db");
 const { json } = require("stream/consumers");
 const { AccessToken, RefreshToken, VerifyToken } = require("../JWT/Auth");
 const { isLoggedIn } = require("../middleware/isLoggedIn");
-const id=uuid()
+// const id=uuid()
 
-const storage=multer.diskStorage({
-    destination:(req,file,cb)=>{
-        cb(null,path.join(__dirname,"../hostProfileImages"))
-    },
-    filename:(req,file,cb)=>{
-        // console.log(file);
-        
-        cb(null,`${id}-${file.originalname}`)
-    }
-})
 
-const upload=multer({storage})
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../temp")); // create temp folder
+  },
+  filename: function (req, file, cb) {
+    cb(null, uuid() + "-" + file.originalname);
+  }
+});
 
+ const upload = multer({ storage });
 
 
 
@@ -32,68 +32,68 @@ const upload=multer({storage})
 
 
 
-hostRouter.post("/register", upload.single("profileImage"), async (req, res) => {
+
+hostRouter.post(
+  "/register",
+  upload.single("profileImage"),
+  async (req, res) => {
     try {
+      const { name, email, password } = req.body;
 
-        // const id = uuid();
+      const hashedPassword = await generateHashPassword(password);
 
-        const file = req?.file?.originalname || null;
+      let profileImg = null;
 
-        const hashedPassword = await generateHashPassword(req.body.password);
+      // If user uploaded image
+      if (req.file) {
+        profileImg = await UploadOnCloudinary(req.file.path);
+      }
 
-        let profileImg = null;
+      // Insert into TiDB
+      const [result] = await pool.execute(
+        `INSERT INTO hostinfo 
+        (full_name, email, password_hash, profile_picture_url)
+        VALUES (?,?,?,?)`,
+        [name, email, hashedPassword, profileImg]
+      );
 
-        if (file) {
-            profileImg = `https://rentra-mern.onrender.com/hostProfileImages/${id}-${file}`;
-        }
+      const payload = {
+        id: result.insertId,
+        email: email,
+      };
 
-        const [result] = await pool.execute(
-            `INSERT INTO hostinfo (full_name, email, password_hash, profile_picture_url)
-             VALUES (?,?,?,?)`,
-            [
-                req.body.name,
-                req.body.email,
-                hashedPassword,
-                profileImg
-            ]
-        );
+      const accessToken = AccessToken(payload);
+      const refreshToken = RefreshToken(payload);
 
-        const payload = {
-            id: result.insertId,
-            email: req.body.email
-        };
+      res.cookie("AccessToken", accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      });
 
-        const accessToken = AccessToken(payload);
-        const refreshToken = RefreshToken(payload);
+      res.cookie("RefreshToken", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      });
 
-      res.cookie("AccessToken", accessToken, 
-    {
-  httpOnly: true,
-  secure: true,       // must be true for HTTPS
-  sameSite: "none"    // required for cross-domain
-}
-);
-
-res.cookie("RefreshToken", refreshToken, 
-    {
-  httpOnly: true,
-  secure: true,
-  sameSite: "none"
-}
-)
-        return res.status(200).json({ msg: "ok data inserted successfully" });
+      return res.status(200).json({
+        message: "Host registered successfully",
+        imageUrl: profileImg, // 👈 you can test this
+      });
 
     } catch (error) {
-        console.log(error); // 👈 log real error
-        return res.status(400).json({ msg: error.message });
+      console.log(error);
+      return res.status(500).json({ message: error.message });
     }
-});
+  }
+);
 
 
 
 hostRouter.post("/login",async(req,res)=>{
 
-console.log(req.body);
+console.log("login body ",req.body);
 
    const [data]=await pool.query(`select * from hostinfo where email=?`,[req.body.email])
    console.log(data);
@@ -244,8 +244,16 @@ console.log(data);
 })
 hostRouter.get("/logout",async(req,res)=>{
     console.log(req.body);
-res.clearCookie("AccessToken")
-res.clearCookie("RefreshToken")
+res.clearCookie("AccessToken",   {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none"
+})
+res.clearCookie("RefreshToken",   {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none"
+})
 
        return res.status(200).send({msg:"ok"})
 

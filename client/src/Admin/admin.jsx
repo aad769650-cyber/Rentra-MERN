@@ -162,7 +162,7 @@ ApproveRoom(id)
 ()=>{
   
                     localStorage.removeItem("isAuthenticate") ;
-              navigate("/loginAdmin")
+              navigate("/loginAdmin",{replace:true})
 }}>
                 <LogOut className="w-5 h-5" />
               </button>

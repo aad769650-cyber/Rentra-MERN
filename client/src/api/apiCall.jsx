@@ -55,10 +55,10 @@ export const verifyHostLogin=async(formData)=>{
 }
 
 
-export const AccessDashBoard=async()=>{
+export const AccessDashBoard=async(navigate)=>{
 
 
-    const navigate=useNavigate()
+    
 try {
      const response=axios.get("https://rentra-mern.onrender.com/owner/dashBoard",{withCredentials:true})
      .then((resp)=>{

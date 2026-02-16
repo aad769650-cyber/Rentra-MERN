@@ -1,6 +1,6 @@
 import { CircleQuestionMark, Globe, House, Menu, UserStar } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { AccessDashBoard } from '../api/apiCall'
 
 const Header = () => {
@@ -12,12 +12,12 @@ const Header = () => {
 const variants={
     center:"flex justify-center items-center"
 }
-
+const navigate=useNavigate()
 
 const handleClick=()=>{
     console.log("clicked");
     
-    AccessDashBoard()
+    AccessDashBoard(navigate)
 }
 
   return (

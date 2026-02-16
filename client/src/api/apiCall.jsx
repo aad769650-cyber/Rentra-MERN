@@ -56,6 +56,9 @@ export const verifyHostLogin=async(formData)=>{
 
 
 export const AccessDashBoard=async()=>{
+
+
+    const navigate=useNavigate()
 try {
      const response=axios.get("https://rentra-mern.onrender.com/owner/dashBoard",{withCredentials:true})
      .then((resp)=>{
@@ -68,11 +71,15 @@ try {
       
       axios.get("https://rentra-mern.onrender.com/refresh",{withCredentials:true})
       .then((data)=>{
+
+        console.log(data,"after refresh");
+        
          if(data.status==204){
             toast.info("please Login")
+
 // window.location.href = "/hostLogin";
 {/* <Navigate to={"/hostLogin"}></Navigate> */}
-<Navigate to="/hostLogin" replace />
+ navigate("/hostLogin", { replace: true });
          }
       })
  
@@ -81,8 +88,7 @@ try {
            toast.info("Welcome to your DashBoard");
 // window.location.href = "/hostDashboard";
 
-<Navigate to="/hostDashboard" replace />
- 
+ navigate("/hostLogin", { replace: true }); 
 
 }
  
@@ -96,8 +102,9 @@ try {
       console.log("err",err);
           toast.error("Your Tokens Expired Please Login again");
 // window.location.href = "/hostLogin";
-<Navigate to="/hostLogin" replace />
-     })
+ navigate("/hostLogin", { replace: true });
+
+})
 
 } catch (error) {
    console.log(error);

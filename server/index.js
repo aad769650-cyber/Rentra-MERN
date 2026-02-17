@@ -13,6 +13,7 @@ const cookieParser = require('cookie-parser')
 const { VerifyToken, AccessToken } = require('./JWT/Auth')
 const { isLoggedIn } = require('./middleware/isLoggedIn')
 const nodemailer=require("nodemailer")
+const { UploadOnCloudinary } = require('./utills/cloudinary')
 
 
 
@@ -82,6 +83,20 @@ app.post("/host/detail",uploads.single("RoomImage"),async(req,res)=>{
 // const user_id=await pool.execute(`select id from host where email=${req.}`)
 
         try {
+
+                let profileImg = null;
+console.log(req.file,"Listings");
+
+      // If user uploaded image
+      if (req.file) {
+        console.log("Inside ");
+        
+        profileImg = await UploadOnCloudinary(req.file.path);
+      }
+
+
+
+
         const query = `INSERT INTO listings (
     title, description, propertyType, spaceType, 
     address, city, country, 
@@ -108,8 +123,7 @@ const values = [
     req.body.essentials, 
     req.body.features,   
     req.body.safety,     
-    `https://rentra-mern.onrender.com/host/${id}-${req.file.originalname}`,
-        
+   profileImg,  
         req?.user?.id||1
 ];
 

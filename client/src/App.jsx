@@ -47,12 +47,12 @@ const App = () => {
   element:<HostSignup></HostSignup>
 },
 {
-  path:"admin",
+  path:"/admin",
   element:<ProtectedRoute><Admin></Admin></ProtectedRoute>
 },
 
 {
-  path:"hostDashboard",
+  path:"/hostDashboard",
   element:<HostDashboard></HostDashboard>
 }
 ,  {

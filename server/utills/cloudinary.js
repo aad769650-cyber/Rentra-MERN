@@ -1,6 +1,8 @@
-const { v2: cloudinary } = require("cloudinary");
 require("dotenv").config();
+const { v2: cloudinary } = require("cloudinary");
 const fs = require("fs");
+
+ console.log(process.env.CLOUDINARY_CLOUD_NAME, process.env.CLOUDINARY_API_KEY);
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -10,6 +12,8 @@ cloudinary.config({
 
 const UploadOnCloudinary = async (localFilePath) => {
   try {
+    console.log("Cloudinary",process.env.CLOUDINARY_CLOUD_NAME, process.env.CLOUDINARY_API_KEY);
+
     if (!localFilePath) return null;
 
     const result = await cloudinary.uploader.upload(localFilePath, {
